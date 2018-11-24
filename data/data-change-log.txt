@@ -1,3 +1,5 @@
 Remove columns:
 Damage
 Geolocation
+STREET_*
+DATE POLICE NOTIFIED
