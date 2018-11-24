@@ -1,4 +1,10 @@
-# Traffic-Violations
-Data mining project involving Montgomery County Traffic Violation Data
+# An Investigation Into What Causes Crash Injuries, Fatalities
+### Using crash data from the City of Chicago
+#### Authors: Nabil Darwich, Hamza Mughal
 
-https://data.montgomerycountymd.gov/Public-Safety/Traffic-Violations/4mse-ku6q
+
+
+Data Sources:
+https://data.cityofchicago.org/Transportation/Traffic-Crashes-Crashes/85ca-t3if 
+https://data.cityofchicago.org/Transportation/Traffic-Crashes-People/u6pd-qa9d 
+https://data.cityofchicago.org/Transportation/Traffic-Crashes-Vehicles/68nd-jvt3 
