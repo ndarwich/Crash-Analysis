@@ -12,8 +12,8 @@ from matplotlib.colors import Normalize
 import os
 import os.path
 import scipy.sparse as sp
- 
-
+from matplotlib.colors import rgb2hex
+import matplotlib as mpl
 
 def main():
     crashes_df = pd.read_csv('../data/crashes-summer2018.csv')
@@ -27,9 +27,108 @@ def main():
 #    plt.savefig('Car_Accidents_Visualization.png')
 #    plt.show()
 #    plt.draw()    
+# Read in population data.
+     
+if __name__ == "__main__":
+    main()
+
+def drawpopulationmapandaccidents():
+    crashes_df = pd.read_csv('../data/crashes-summer2018.csv')    
+    pop_path = "ChicagoPopulation.csv"
+    DF       = pd.read_csv("ChicagoPopulation.csv")
+    colormap = plt.cm.Oranges 
+    
     us_shape_file_dir = "cb_2017_us_zcta510_500k"
     os.chdir(us_shape_file_dir)
     
+    # Chicago coordinates.
+    lowerlon = -88.2 
+    upperlon = -87.2
+    lowerlat = 41.62
+    upperlat = 42.05
+    
+    
+    m = Basemap(
+        llcrnrlon=lowerlon,
+        llcrnrlat=lowerlat,
+        urcrnrlon=upperlon,
+        urcrnrlat=upperlat,
+        projection="lcc",
+        resolution="c",
+        lat_0=lowerlat,
+        lat_1=upperlat,
+        lon_0=lowerlon,
+        lon_1=upperlon
+        )
+    
+    
+    shp_info = m.readshapefile(
+        os.path.basename(us_shape_file_dir),'states',drawbounds=True
+        )
+    
+    # Convert integer ZIP5 field to character dtype.
+    DF['ZIP5'] = DF['ZIP5'].astype(str)
+    
+    # Read population density info into popdens dict. Take square root of 
+    # actual density for better color mapping.
+    popdens = {
+        str(i):np.sqrt(j) for (i, j) in zip(DF.ZIP5.values,DF.POPULATION.values)
+        }
+    
+    # Choose a color for each state based on population density. Range
+    # vmin-vmax has arbitrarily been set to 0-6. Fee lfree to experiment 
+    # with other ranges.
+    ziplist = []
+    colors  = {}
+    vmin    = 0.
+    vmax    = 6.
+    
+    
+    # Filter m.states_info to only Chicago zipcodes.
+    zip_info   = m.states_info
+    popdiv     = (max(popdens.values())/(vmax-vmin))
+    popdensscl = {i:(j/popdiv) for (i,j) in popdens.items()}
+    
+    
+    for d in zip_info:
+        iterzip = d["ZCTA5CE10"]
+        if iterzip in popdensscl.keys():
+            iterpop = popdensscl.get(iterzip,0)
+            colors[iterzip] = colormap(iterpop/vmax)[:3]
+        ziplist.append(iterzip)
+    
+    
+    for nshape,seg in enumerate(m.states):
+        i, j = zip(*seg)
+        if ziplist[nshape] in popdensscl.keys():
+            color = rgb2hex(colors[ziplist[nshape]])
+            edgecolor = "#000000"
+            plt.fill(i,j,color,edgecolor=edgecolor);
+    
+    
+    # (Optional) include colorbar.
+    sm = plt.cm.ScalarMappable(
+        cmap=colormap,norm=mpl.colors.Normalize(vmin=vmin, vmax=vmax)
+        )
+    lats = []
+    longs = []
+    for i, e in enumerate(crashes_df.LONGITUDE):
+#        print(i, crashes_df.LONGITUDE[i])
+#        break
+        lats.append(crashes_df.LATITUDE[i])
+        longs.append(crashes_df.LONGITUDE[i])
+    m.scatter(longs, lats, s=1,alpha=0.08,marker = 'o', color = 'b', zorder=2, latlon=True)          
+    mm = plt.cm.ScalarMappable(cmap=colormap)
+    mm.set_array([vmin, vmax])
+    plt.colorbar(mm,ticks=np.arange(vmin, vmax+1, 1),orientation="vertical")
+    plt.gca().axis("off")
+    plt.show()      
+
+
+def drawmapandaccidents(): # tutorial on basemaps from http://www.jtrive.com/visualizing-population-density-by-zip-code-with-basemap.html
+    us_shape_file_dir = "cb_2017_us_zcta510_500k"
+    os.chdir(us_shape_file_dir)
+    crashes_df = pd.read_csv('../data/crashes-summer2018.csv')    
     # Chicago coordinates.
     lowerlon = -88.2 
     upperlon = -87.2
@@ -54,14 +153,7 @@ def main():
     crashes_df.LATITUDE.dropna()
     crashes_df['lat_lon'] = list(zip(crashes_df.LONGITUDE, crashes_df.LATITUDE))
     print(crashes_df['lat_lon'])
-#    for i in crashes_df['lat_lon']:
-#        if h % 5000 == 0:
-#            print(h)
-##        print(i[0])
-##        break
-#        h+=1
-##        x,y = i
-#        m.plot(i[0], i[1], marker = 'o', c='r', markersize=1, alpha=0.8, latlon=False)
+
     print("Finished mapping plots")    
     shp_info = m.readshapefile(os.path.basename(us_shape_file_dir), 'state')
 #    m.plot(32,42, marker = 'o', c='r', markersize=6, alpha=0.8, latlon=False)
@@ -80,46 +172,4 @@ def main():
     plt.gca().axis("off")
     plt.savefig('Car_Accidents_Chicago_Visualization.png')
     plt.show() 
-    plt.draw()         
-if __name__ == "__main__":
-    main()
-
-
-def drawmap():
-    us_shape_file_dir = "cb_2017_us_zcta510_500k"
-    os.chdir(us_shape_file_dir)
-    
-    # Chicago coordinates.
-    lowerlon = -88.2 
-    upperlon = -87.2
-    lowerlat = 41.62
-    upperlat = 42.05
-    
-    
-    m = Basemap(
-        llcrnrlon=lowerlon,
-        llcrnrlat=lowerlat,
-        urcrnrlon=upperlon,
-        urcrnrlat=upperlat,
-        resolution='c',
-        projection='lcc',
-        lat_0=lowerlat,
-        lat_1=upperlat,
-        lon_0=lowerlon,
-        lon_1=upperlon
-        )
-    h = 0
-    crashes_df.LONGITUDE.dropna()
-    crashes_df.LATITUDE.dropna()
-    crashes_df['lat_lon'] = list(zip(crashes_df.LONGITUDE, crashes_df.LATITUDE))
-    print(crashes_df['lat_lon'])
-#    for i in crashes_df['lat_lon']:
-#        if h % 10 == 0:
-#            print(h)
-#        h+=1
-#        x,y = i
-#        m.plot(x, y, marker = 'o', c='r', markersize=1, alpha=0.8, latlon=False)
-    m.plot(-87.73654930000001,41.91967954, marker = 'o', c='r', markersize=6, alpha=0.8, latlon=False)    
-    shp_info = m.readshapefile(os.path.basename(us_shape_file_dir), 'state')
-    plt.gca().axis("off")
-    plt.show()       
+    plt.draw()    
