@@ -14,7 +14,7 @@ import os.path
 import scipy.sparse as sp
 from matplotlib.colors import rgb2hex
 import matplotlib as mpl
-
+import seaborn as sns
 
 
 def main():
@@ -37,23 +37,22 @@ def main():
     print(crashes_df['PRIM_CONTRIBUTORY_CAUSE'].value_counts())
 #    acc_count = crashes_df.groupby(crashes_df.PRIM_CONTRIBUTORY_CAUSE).PRIM_CONTRIBUTORY_CAUSE.count().plot(kind = 'bar')
 #    acc_count2 = crashes_df.groupby(crashes_df.LIGHTING_CONDITION).LIGHTING_CONDITION.count().plot(kind = 'bar')
+#    plt.plot(crashes_df['WEATHER_CONDITION'], crashes_df['PRIM_CONTRIBUTORY_CAUSE'], 'bo')
+#    plt.show()
+#    sns.catplot(x="MOST_SEVERE_INJURY", y="WEATHER_CONDITION", data=crashes_df);
 
-
-
- 
+    sns.lineplot(x='TRAFFICWAY_TYPE', y='MOST_SEVERE_INJURY', data=crashes_df)
 if __name__ == "__main__":
     main()
 
 def drawproportiongraph():
-    weather_group = crashes_df['TRAFFICWAY_TYPE'].value_counts()
+    weather_group = crashes_df['34_CONDITION'].value_counts()
     print(weather_group)
-    plt.xlabel('Proportion of Crashes')
-#    labels = ['DAYLIGHT', 'LIGHTED ROAD', 'DARKNESS', 'UNKNOWN', 'DUSK',
-#          'DAWN']
-#    weather_group.index = labels
+    plt.ylabel('Proportion of Crashes')
+    labels = ['CLEAR', 'RAIN', 'UNKNOWN', 'CLOUDY', 'OTHER', 'FOG', 'SNOW', 'SLEET', 'SEVERE CROSS WIND GATE']
+    weather_group.index = labels
 
-    (weather_group / weather_group.sum()).plot(kind='barh')    
-#    plt.show()    
+    (weather_group / weather_group.sum()).plot(kind='barh')     
 
 
 def drawpopulationmapandaccidents():
