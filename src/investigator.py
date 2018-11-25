@@ -15,6 +15,8 @@ import scipy.sparse as sp
 from matplotlib.colors import rgb2hex
 import matplotlib as mpl
 
+
+
 def main():
     crashes_df = pd.read_csv('../data/crashes-summer2018.csv')
     people_df = pd.read_csv('../data/people-summer2018.csv')
@@ -28,9 +30,31 @@ def main():
 #    plt.show()
 #    plt.draw()    
 # Read in population data.
-     
+       
+    test2 = sp.csr_matrix(crashes_df.astype(float)) 
+    #print(test2)     
+#    print(crashes_df.groupby('PRIM_CONTRIBUTORY_CAUSE').count())
+    print(crashes_df['PRIM_CONTRIBUTORY_CAUSE'].value_counts())
+#    acc_count = crashes_df.groupby(crashes_df.PRIM_CONTRIBUTORY_CAUSE).PRIM_CONTRIBUTORY_CAUSE.count().plot(kind = 'bar')
+#    acc_count2 = crashes_df.groupby(crashes_df.LIGHTING_CONDITION).LIGHTING_CONDITION.count().plot(kind = 'bar')
+
+
+
+ 
 if __name__ == "__main__":
     main()
+
+def drawproportiongraph():
+    weather_group = crashes_df['TRAFFICWAY_TYPE'].value_counts()
+    print(weather_group)
+    plt.xlabel('Proportion of Crashes')
+#    labels = ['DAYLIGHT', 'LIGHTED ROAD', 'DARKNESS', 'UNKNOWN', 'DUSK',
+#          'DAWN']
+#    weather_group.index = labels
+
+    (weather_group / weather_group.sum()).plot(kind='barh')    
+#    plt.show()    
+
 
 def drawpopulationmapandaccidents():
     crashes_df = pd.read_csv('../data/crashes-summer2018.csv')    
