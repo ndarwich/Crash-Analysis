@@ -31,17 +31,12 @@ def main():
 #    plt.draw()    
 # Read in population data.
        
-    test2 = sp.csr_matrix(crashes_df.astype(float)) 
-    #print(test2)     
-#    print(crashes_df.groupby('PRIM_CONTRIBUTORY_CAUSE').count())
-    print(crashes_df['PRIM_CONTRIBUTORY_CAUSE'].value_counts())
-#    acc_count = crashes_df.groupby(crashes_df.PRIM_CONTRIBUTORY_CAUSE).PRIM_CONTRIBUTORY_CAUSE.count().plot(kind = 'bar')
-#    acc_count2 = crashes_df.groupby(crashes_df.LIGHTING_CONDITION).LIGHTING_CONDITION.count().plot(kind = 'bar')
-#    plt.plot(crashes_df['WEATHER_CONDITION'], crashes_df['PRIM_CONTRIBUTORY_CAUSE'], 'bo')
-#    plt.show()
-#    sns.catplot(x="MOST_SEVERE_INJURY", y="WEATHER_CONDITION", data=crashes_df);
-
-    sns.lineplot(x='TRAFFICWAY_TYPE', y='MOST_SEVERE_INJURY', data=crashes_df)
+    test2 = sp.csr_matrix(crashes_df.astype(float))
+    
+    test = pd.read_table("../data/crashes-summer2018_modified.csv", header=None, skip_blank_lines=False, sep=',')
+    test_labels = test[0]
+    train = test[test[3:]]
+    print(train)
 if __name__ == "__main__":
     main()
 
