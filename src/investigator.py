@@ -62,8 +62,17 @@ def main():
     feature_name = trainingTable.columns[feature_idx]
     print(feature_name)
     kbestfeaturenames = ','.join(feature_name)
-    np.savetxt("oversampledtrain.csv", X_res, delimiter=",",header=kbestfeaturenames,fmt='%d')
-    np.savetxt("oversampledlabels.csv", y_res, delimiter=",",header='MOST_SEVERE_INJURY',fmt='%d')    
+    print(kbestfeaturenames)
+    np.savetxt("oversampledtrain.csv", X_res, delimiter=",",header=kbestfeaturenames,comments='',fmt='%d')
+    np.savetxt("oversampledlabels.csv", y_res, delimiter=",",header='MOST_SEVERE_INJURY',comments='',fmt='%d')
+    oversampledtrain = pd.read_csv("oversampledlabels.csv")
+    string_oversampledlabels = []
+    for x in oversampledtrain:
+        print(oversampledtrain[x])
+        for val in oversampledtrain[x]:
+            string_oversampledlabels.append("INJURY " + str(val))
+    np.savetxt("oversampledlabels_strings.csv", string_oversampledlabels, delimiter=",",header='MOST_SEVERE_INJURY',comments='',fmt='%s')    
+        
     
     
 if __name__ == "__main__":
