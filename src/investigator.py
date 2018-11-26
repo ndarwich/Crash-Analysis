@@ -5,7 +5,6 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.cm
 import numpy as np
-from mpl_toolkits.basemap import Basemap
 from matplotlib.patches import Polygon
 from matplotlib.collections import PatchCollection
 from matplotlib.colors import Normalize
@@ -15,9 +14,20 @@ import scipy.sparse as sp
 from matplotlib.colors import rgb2hex
 import matplotlib as mpl
 import seaborn as sns
+from imblearn import under_sampling, over_sampling
+from imblearn.combine import SMOTETomek
+from imblearn.over_sampling import RandomOverSampler
+from sklearn.model_selection import train_test_split, cross_val_score
+
+#data splitting for training data
+def splitTraining(X, y):
+    #0.28 split produced great results
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.28, random_state=0)
+    return X_train, X_test, y_train, y_test
 
 
 def main():
+    '''
     crashes_df = pd.read_csv('../data/crashes-summer2018.csv')
     people_df = pd.read_csv('../data/people-summer2018.csv')
     vehicles_df = pd.read_csv('../data/vehicles-summer2018.csv')
@@ -25,21 +35,20 @@ def main():
     for df in dfs:
         df.columns = [c.replace(' ', '_') for c in df.columns]
         print(df.columns)
-#    plt.scatter(crashes_df.LONGITUDE,crashes_df.LATITUDE)
-#    plt.savefig('Car_Accidents_Visualization.png')
-#    plt.show()
-#    plt.draw()    
-# Read in population data.
-       
-    test2 = sp.csr_matrix(crashes_df.astype(float))
-    
-    test = pd.read_table("../data/crashes-summer2018_modified.csv", header=None, skip_blank_lines=False, sep=',')
-    test_labels = test[0]
-    train = test[test[3:]]
-    print(train)
+    '''
+    trainingTable = pd.read_csv("../data/trainingValid.csv")
+    trainingTable.columns = [c.replace(' ', '_') for c in trainingTable.columns]
+    print(trainingTable.columns)
+    trainingValues = trainingTable
+    trainingLabels = trainingTable
+    print(trainingLabels)
+    X_train, X_test, y_train, y_test = splitTraining(trainingValues, trainingLabels)
+
 if __name__ == "__main__":
     main()
 
+
+'''
 def drawproportiongraph():
     weather_group = crashes_df['34_CONDITION'].value_counts()
     print(weather_group)
@@ -146,7 +155,7 @@ def drawpopulationmapandaccidents():
 def drawmapandaccidents(): # tutorial on basemaps from http://www.jtrive.com/visualizing-population-density-by-zip-code-with-basemap.html
     us_shape_file_dir = "cb_2017_us_zcta510_500k"
     os.chdir(us_shape_file_dir)
-    crashes_df = pd.read_csv('../data/crashes-summer2018.csv')    
+    crashes_df = pd.read_csv('../data/crashes-summer2018.csv')
     # Chicago coordinates.
     lowerlon = -88.2 
     upperlon = -87.2
@@ -191,3 +200,4 @@ def drawmapandaccidents(): # tutorial on basemaps from http://www.jtrive.com/vis
     plt.savefig('Car_Accidents_Chicago_Visualization.png')
     plt.show() 
     plt.draw()    
+'''
