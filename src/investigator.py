@@ -63,18 +63,15 @@ def main():
     print(feature_name)
     kbestfeaturenames = ','.join(feature_name)
     print(kbestfeaturenames)
-    np.savetxt("oversampledtrain.csv", X_res, delimiter=",",header=kbestfeaturenames,comments='',fmt='%d')
-    np.savetxt("oversampledlabels.csv", y_res, delimiter=",",header='MOST_SEVERE_INJURY',comments='',fmt='%d')
-    oversampledtrain = pd.read_csv("oversampledlabels.csv")
-    string_oversampledlabels = []
-    for x in oversampledtrain:
-        print(oversampledtrain[x])
-        for val in oversampledtrain[x]:
-            string_oversampledlabels.append("INJURY " + str(val))
-    np.savetxt("oversampledlabels_strings.csv", string_oversampledlabels, delimiter=",",header='MOST_SEVERE_INJURY',comments='',fmt='%s')    
-        
+#    np.savetxt("oversampledtrain.csv", X_res, delimiter=",",header=kbestfeaturenames,comments='',fmt='%d')
+#    np.savetxt("oversampledlabels.csv", y_res, delimiter=",",header='MOST_SEVERE_INJURY',comments='',fmt='%d')
     
+    y_res_2 = [str((int(v))) + " INJURY" for v in y_res]
     
+    np.savetxt("oversampledlabels_strings.csv", y_res_2, delimiter=",",header='MOST_SEVERE_INJURY',comments='',fmt='%s')    
+
+    mylist = [[str(int(x[g])) + " " + feature_name[g] for g in range(len(x))] for x in X_res]
+    np.savetxt("oversampledtrain_strings.csv", mylist, delimiter=",",header=kbestfeaturenames,comments='',fmt='%s')          
 if __name__ == "__main__":
     main()
 
