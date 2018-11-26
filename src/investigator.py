@@ -51,14 +51,19 @@ def main():
     X_train, X_test, y_train, y_test = splitTraining(trainingTable, trainingLabels)
     trainingmatrix = sp.csr_matrix(X_train)
     kbest = SelectKBest(chi2, k=20)
+    
 #    print(trainingmatrix.toarray())
     reduced_train = kbest.fit_transform(trainingmatrix.toarray(), y_train)
 #
     ros = RandomOverSampler(random_state=42)
     X_res, y_res = ros.fit_sample(reduced_train, y_train)   
     print(y_res) 
-    np.savetxt("oversampledtrain.csv", X_res, delimiter=",",fmt='%d')
-    np.savetxt("oversampledlabels.csv", y_res, delimiter=",",fmt='%d')    
+    feature_idx = kbest.get_support()
+    feature_name = trainingTable.columns[feature_idx]
+    print(feature_name)
+    kbestfeaturenames = ','.join(feature_name)
+    np.savetxt("oversampledtrain.csv", X_res, delimiter=",",header=kbestfeaturenames,fmt='%d')
+    np.savetxt("oversampledlabels.csv", y_res, delimiter=",",header='MOST_SEVERE_INJURY',fmt='%d')    
     
     
 if __name__ == "__main__":
