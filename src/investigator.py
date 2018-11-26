@@ -41,8 +41,8 @@ def main():
     '''
 #    trainingTable = pd.read_csv("../data/trainingValid.csv")
     
-    trainingTable = pd.read_csv("../data/trainingValid.csv")
-    trainingLabels = pd.read_csv("../data/TrainingLabels.csv")
+    trainingTable = pd.read_csv("../data/training-final-values.csv")
+    trainingLabels = pd.read_csv("../data/training-final-labels.csv")
     trainingTable.columns = [c.replace(' ', '_') for c in trainingTable.columns]
 #    print(trainingTable.columns)
     trainingValues = trainingTable
