@@ -18,6 +18,9 @@ from imblearn import under_sampling, over_sampling
 from imblearn.combine import SMOTETomek
 from imblearn.over_sampling import RandomOverSampler
 from sklearn.model_selection import train_test_split, cross_val_score
+from sklearn.feature_selection import SelectKBest, SelectPercentile, chi2, SelectFdr, f_regression, mutual_info_classif, RFE
+from imblearn import over_sampling
+
 
 #data splitting for training data
 def splitTraining(X, y):
@@ -36,14 +39,25 @@ def main():
         df.columns = [c.replace(' ', '_') for c in df.columns]
         print(df.columns)
     '''
+#    trainingTable = pd.read_csv("../data/trainingValid.csv")
+    
     trainingTable = pd.read_csv("../data/trainingValid.csv")
+    trainingLabels = pd.read_csv("../data/TrainingLabels.csv")
     trainingTable.columns = [c.replace(' ', '_') for c in trainingTable.columns]
-    print(trainingTable.columns)
+#    print(trainingTable.columns)
     trainingValues = trainingTable
-    trainingLabels = trainingTable
-    print(trainingLabels)
-    X_train, X_test, y_train, y_test = splitTraining(trainingValues, trainingLabels)
-
+#    print(trainingLabels.values)
+#    print(trainingTable)
+    X_train, X_test, y_train, y_test = splitTraining(trainingTable, trainingLabels)
+    trainingmatrix = sp.csr_matrix(X_train)
+    kbest = SelectKBest(chi2, k=20)
+#    print(trainingmatrix.toarray())
+    reduced_train = kbest.fit_transform(trainingmatrix.toarray(), y_train)
+#
+    ros = RandomOverSampler(random_state=42)
+    X_res, y_res = ros.fit_sample(reduced_train, y_train)   
+    
+    
 if __name__ == "__main__":
     main()
 
