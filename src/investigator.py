@@ -57,6 +57,9 @@ def main():
     ros = RandomOverSampler(random_state=42)
     X_res, y_res = ros.fit_sample(reduced_train, y_train)   
     
+    np.savetxt("oversampledtrain.csv", X_res, delimiter=",",fmt='%d')
+    np.savetxt("oversampledlabels.csv", X_res, delimiter=",",fmt='%d')    
+    
     
 if __name__ == "__main__":
     main()
