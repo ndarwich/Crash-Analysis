@@ -21,6 +21,305 @@ from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.feature_selection import SelectKBest, SelectPercentile, chi2, SelectFdr, f_regression, mutual_info_classif, RFE
 from imblearn import over_sampling
 
+LIGHTING_CONDITION = {
+0: "DARKNESS",
+1: "DAYLIGHT",
+2: "DAWN",
+3: "DARKNESS, LIGHTED ROAD",
+4: "DUSK",
+12: "OTHER",
+200: "UNKNOWN"
+        }
+
+WEATHER_CONDITION = {
+0: "CLEAR",
+1: "CLOUDY/OVERCAST",
+2: "RAIN",
+3: "SEVERE CROSS WIND GATE",
+4: "SLEET/HAIL",
+5: "SNOW",
+6: "FOG/SMOKE/HAZE",
+12: "OTHER",
+200: "UNKNOWN"
+        }
+
+TRAFFIC_CONTROL_DEVICE = {
+0: "NO_CONTROLS",
+1: "TRAFFIC SIGNAL",
+2: "STOP SIGN/FLASHER",
+3: "LANE USE MARKING",
+4: "YIELD",
+5: "SCHOOL ZONE",
+6: "RAILROAD CROSSING GATE",
+7: "POLICE/FLAGMAN",
+8: "DELINEATORS",
+9: "OTHER WARNING SIGN",
+10: "OTHER REG. SIGN",
+11: "OTHER RAILROAD CROSSING",
+12: "OTHER",
+200: "UNKNOWN"
+        }
+
+DEVICE_CONDITION = {
+0:  "NOT KNOWN",
+1: "FUNCTIONING IMPROPERLY",
+2: "FUNCTIONING PROPERLY",
+3: "NOT FUNCTIONING",
+4: "MISSING",
+5: "WORN REFLECTIVE MATERIAL",
+12: "OTHER",
+200: "UNKNOWN"
+        }
+
+ROADWAY_SURFACE_COND = {
+0: "DRY",
+1: "WET",
+2: "SAND, MUD, DIRT",
+3: "SNOW OR SLUSH",
+12: "OTHER",
+200: "UNKNOWN"
+        }
+
+FIRST_CRASH_TYPE = {
+0: "ANGLE",
+1: "ANIMAL",
+2: "FIXED OBJECT",
+3: "HEAD ON",
+4: "OTHER NONCOLLISION",
+5: "OTHER OBJECT",
+6: "OVERTURNED",
+7: "PARKED MOTOR VEHICLE",
+8: "PEDALCYCLIST",
+9: "PEDESTRIAN",
+10: "REAR END",
+11: "SIDESWIPE OPPOSITE DIRECTION",
+12: "SIDESWIPE SAME DIRECTION",
+13: "TRAIN",
+14: "TURNING",
+200: "UNKNOWN"
+        }
+
+TRAFFICWAY_TYPE = {
+0: "ALLEY",
+1: "CENTER TURN LANE",
+2: "DIVIDED - W/MEDIAN (NOT RAISED)",
+3: "DIVIDED - W/MEDIAN BARRIER",
+4: "DRIVEWAY",
+5: "NOT DIVIDED",
+6: "ONE-WAY",
+7: "PARKING LOT",
+8: "RAMP",
+12: "OTHER",
+200: "UNKNOWN"
+        }
+
+ALIGNMENT = {
+0: "STRAIGHT AND LEVEL",
+1: "STRAIGHT ON HILLCREST",
+2: "STRAIGHT ON GRADE",
+3: "CURVE, LEVEL",
+4: "CURVE ON HILLCREST",
+5: "CURVE ON GRADE",
+200: "UNKNOWN"
+        }
+
+ROAD_DEFECT = {
+0: "NO DEFECTS",
+1: "RUT, HOLES",
+2: "SHOULDER DEFECT",
+3: "WORN SURFACE",
+4: "DEBRIS ON ROADWAY",
+12: "OTHER",
+200: "UNKNOWN"
+        }
+
+CRASH_TYPE = {
+0: "NO INJURY / DRIVE AWAY",
+1: "INJURY AND / OR TOW DUE TO CRASH",
+12: "OTHER",
+200: "UNKNOWN"
+        }
+
+PRIM_CONTRIBUTORY_CAUSE = SEC_CONTRIBUTORY_CAUSE = {
+0: "UNABLE TO DETERMINE",
+1: "ANIMAL",
+2: "CELL PHONE USE OTHER THAN TEXTING",
+3: "DISREGARDING OTHER TRAFFIC SIGNS",
+4: "DISREGARDING ROAD MARKINGS",
+5: "DISREGARDING STOP SIGN",
+6: "DISREGARDING TRAFFIC SIGNALS",
+7: "DISTRACTION - FROM INSIDE VEHICLE",
+8: "DISTRACTION - FROM OUTSIDE VEHICLE",
+9: "DISTRACTION - OTHER ELECTRONIC DEVICE (NAVIGATION DEVICE, DVD PLAYER, ETC.)",
+10: "DRIVING ON WRONG SIDE/WRONG WAY",
+11: "DRIVING SKILLS/KNOWLEDGE/EXPERIENCE",
+12: "EQUIPMENT - VEHICLE CONDITION",
+13: "EVASIVE ACTION DUE TO ANIMAL, OBJECT, NONMOTORIST",
+14: "EXCEEDING AUTHORIZED SPEED LIMIT",
+15: "EXCEEDING SAFE SPEED FOR CONDITIONS",
+16: "FAILING TO REDUCE SPEED TO AVOID CRASH",
+17: "FAILING TO YIELD RIGHT-OF-WAY",
+18: "FOLLOWING TOO CLOSELY",
+19: "HAD BEEN DRINKING (USE WHEN ARREST IS NOT MADE)",
+20: "IMPROPER BACKING",
+21: "IMPROPER LANE USAGE",
+22: "IMPROPER OVERTAKING/PASSING",
+23: "IMPROPER TURNING/NO SIGNAL",
+24: "MOTORCYCLE ADVANCING LEGALLY ON RED LIGHT",
+25: "OPERATING VEHICLE IN ERRATIC, RECKLESS, CARELESS, NEGLIGENT OR AGGRESSIVE MANNER",
+26: "PASSING STOPPED SCHOOL BUS",
+27: "PHYSICAL CONDITION OF DRIVER",
+28: "ROAD CONSTRUCTION/MAINTENANCE",
+29: "ROAD ENGINEERING/SURFACE/MARKING DEFECTS",
+30: "TEXTING",
+31: "TURNING RIGHT ON RED",
+32: "UNDER THE INFLUENCE OF ALCOHOL/DRUGS (USE WHEN ARREST IS EFFECTED)",
+33: "VISION OBSCURED (SIGNS, TREE LIMBS, BUILDINGS, ETC.)",
+34: "WEATHER",
+35: "BICYCLE ADVANCING LEGALLY ON RED LIGHT",
+36: "DISREGARDING YIELD SIGN",
+200: "UNKNOWN"
+        }
+
+WORK_ZONE_TYPE = {
+0: "UTILITY",
+1: "MAINTENANCE",
+2: "CONSTRUCTION",
+200: "UNKNOWN"
+        }
+
+INJURY_CLASSIFICATION = {
+0: "NO INDICATION OF INJURY",
+1: "REPORTED, NOT EVIDENT",
+2: "NONINCAPACITATING INJURY",
+3: "INCAPACITATING INJURY",
+4: "FATAL",
+200: "UNKNOWN"
+        }
+
+PERSON_TYPE = {
+0: "DRIVER",
+1: "PASSENGER",
+2: "NON-CONTACT VEHICLE",
+3: "NON-MOTOR VEHICLE",
+4: "BICYCLIST",
+5: "PEDESTRIAN",
+200: "UNKNOWN"
+        }
+
+SEX = {
+0: "M",
+1: "F",
+2: "X",
+12: "OTHER",
+200: "UNKNOWN"
+        }
+
+PHYSICAL_CONDITION = {
+0: "NORMAL",
+1: "EMOTIONAL",
+2: "FATIGUED/ASLEEP",
+3: "HAD BEEN DRINKING",
+4: "ILLNESS/FAINTED",
+5: "IMPAIRED - ALCOHOL",
+6: "IMPAIRED - DRUGS",
+7: "REMOVED BY EMS",
+8: "MEDICATED",
+12: "OTHER",
+200: "UNKNOWN"
+        }
+
+SAFETY_EQUIPMENT = {
+0: "SAFETY BELT USED",
+1: "SAFETY BELT NOT USED",
+2: "HELMET NOT USED",
+3: "HELMET USED",
+4: "CHILD RESTRAINT NOT USED",
+5: "CHILD RESTRAINT USED",
+6: "CHILD RESTRAINT USED IMPROPERLY",
+7: "NONE PRESENT",
+12: "OTHER",
+200: "UNKNOWN"
+        }
+
+DRIVER_ACTION = {
+0: "NONE",
+1: "FAILED TO YIELD",
+2: "IMPROPER PASSING",
+3: "FOLLOWED TOO CLOSELY",
+4: "IMPROPER LANE CHANGE",
+5: "DISREGARDED CONTROL DEVICES",
+6: "IMPROPER BACKING",
+7: "IMPROPER TURN",
+8: "TOO FAST FOR CONDITIONS",
+9: "WRONG WAY/SIDE",
+10: "IMPROPER PARKING",
+11: "TEXTING",
+12: "OTHER/STOPPED SCHOOL BUS/LICENSE RESTRICTIONS",
+13: "EVADING POLICE VEHICLE",
+14: "EMERGENCY VEHICLE ON CALL",
+15: "CELL PHONE USE OTHER THAN TEXTING",
+200: "UNKNOWN"
+        }
+
+DRIVER_VISION = {
+0: "NOT OBSCURED",
+1: "MOVING VEHICLES",
+2: "BUILDINGS",
+3: "TREES, PLANTS",
+4: "WINDSHIELD (WATER/ICE)",
+5: "PARKED VEHICLES",
+6: "BLINDED - SUNLIGHT/BLINDED - HEADLIGHTS",
+12: "OTHER/SIGNBOARD/HILLCREST/BLOWING MATERIALS",
+200: "UNKNOWN"
+        }
+
+ROADWAY_SURFACE_COND = {
+0: "DRY",
+1: "WET",
+2: "SAND, MUD, DIRT",
+3: "SNOW OR SLUSH",
+12: "OTHER",
+200: "UNKNOWN"
+        }
+
+AGE = {
+       0: "SMALL CHILD 0-6",
+       1: "PRE-TEEN 6-13",
+       2: "TEEN 13-18",
+       3: "YOUNG ADULT 18-21",
+       4: "ADULT 21-30",
+       5: "MIDDLE AGED ADULT 30-50",
+       6: "OLD ADULT 50-65",
+       7: "SENIOR 65-75",
+       8: "OLD SENIOR 75-90",
+       9: "VERY OLD SENIOR 90-120",
+       200: "UNKNOWN AGE"
+       }
+
+categories = {
+"PERSON_TYPE": PERSON_TYPE,
+#"POSTED_SPEED_LIMIT": POSTED_SPEED_LIMIT,
+"TRAFFIC_CONTROL_DEVICE": TRAFFIC_CONTROL_DEVICE,
+"DEVICE_CONDITION": DEVICE_CONDITION,
+"WEATHER_CONDITION": WEATHER_CONDITION,
+"LIGHTING_CONDITION": LIGHTING_CONDITION,
+"FIRST_CRASH_TYPE": FIRST_CRASH_TYPE,
+"TRAFFICWAY_TYPE": TRAFFICWAY_TYPE,
+"ALIGNMENT": ALIGNMENT,
+"ROADWAY_SURFACE_COND": ROADWAY_SURFACE_COND,
+"ROAD_DEFECT": ROAD_DEFECT,
+"PRIM_CONTRIBUTORY_CAUSE": PRIM_CONTRIBUTORY_CAUSE,
+"SEC_CONTRIBUTORY_CAUSE": SEC_CONTRIBUTORY_CAUSE,
+"SEX": SEX,
+"AGE": AGE,
+"SAFETY_EQUIPMENT": SAFETY_EQUIPMENT,
+"DRIVER_ACTION": DRIVER_ACTION,
+"DRIVER_VISION": DRIVER_VISION,
+"PHYSICAL_CONDITION": PHYSICAL_CONDITION
+        }
+
+
 
 #data splitting for training data
 def splitTraining(X, y):
@@ -56,7 +355,7 @@ def main():
     reduced_train = kbest.fit_transform(trainingmatrix.toarray(), y_train)
 #
     ros = RandomOverSampler(random_state=42)
-    X_res, y_res = ros.fit_sample(reduced_train, y_train)   
+    X_res, y_res = ros.fit_sample(reduced_train, y_train)
     print(y_res) 
     feature_idx = kbest.get_support()
     feature_name = trainingTable.columns[feature_idx]
@@ -66,11 +365,53 @@ def main():
 #    np.savetxt("oversampledtrain.csv", X_res, delimiter=",",header=kbestfeaturenames,comments='',fmt='%d')
 #    np.savetxt("oversampledlabels.csv", y_res, delimiter=",",header='INJURY_CLASSIFICATION',comments='',fmt='%d')
     
-    y_res_2 = [str((int(v))) + " INJURY" for v in y_res]
+    y_res_2 = []
+    for v in y_res:
+        y_res_2.append(INJURY_CLASSIFICATION[v])
     
     np.savetxt("oversampledlabels_strings.csv", y_res_2, delimiter=",",header='INJURY_CLASSIFICATION',comments='',fmt='%s')    
-
-    mylist = [[str(int(x[g])) + " " + feature_name[g] for g in range(len(x))] for x in X_res]
+   # mylist = [[ for g in range(len(x))] for x in X_res]
+    X_res = X_res.astype(int)
+    categoryList = categories.keys()
+    mylist = []
+    for x in X_res:
+        sublist = []
+        for g in range(len(x)):
+            if feature_name[g] in categoryList:
+                try:
+                    feature = categories[feature_name[g]]
+                    #special case - ages: categorize them
+                    if feature_name[g] == "AGE":
+                        age = x[g]
+                        if age < 6:
+                            sublist.append(feature[0])
+                        elif age < 13:
+                            sublist.append(feature[1])
+                        elif age < 18:
+                            sublist.append(feature[2])
+                        elif age < 21:
+                            sublist.append(feature[3])
+                        elif age < 30:
+                            sublist.append(feature[4])
+                        elif age < 50:
+                            sublist.append(feature[5])
+                        elif age < 65:
+                            sublist.append(feature[6])
+                        elif age < 75:
+                            sublist.append(feature[7])
+                        elif age < 90:
+                            sublist.append(feature[8])
+                        elif age < 120:
+                            sublist.append(feature[9])
+                        else:
+                            sublist.append(feature[200])
+                        continue
+                    sublist.append(feature[x[g]])
+                except Exception as e:
+                    print("Error x[g] =", x[g], "Feature =", feature)
+            else:
+                sublist.append(str(int(x[g])) + " " + feature_name[g])
+        mylist.append(sublist)
     np.savetxt("oversampledtrain_strings.csv", mylist, delimiter=",",header=kbestfeaturenames,comments='',fmt='%s')          
 if __name__ == "__main__":
     main()
