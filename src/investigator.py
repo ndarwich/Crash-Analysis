@@ -284,16 +284,17 @@ ROADWAY_SURFACE_COND = {
 }
 
 AGE = {
-   0: "SMALL CHILD 0 TO 6",
-   1: "PRETEEN 6 TO 13",
-   2: "TEEN 13 TO 18",
-   3: "YOUNG ADULT 18 TO 21",
-   4: "ADULT 21 TO 30",
-   5: "MIDDLE AGED ADULT 30 TO 50",
-   6: "OLD ADULT 50 TO 65",
-   7: "SENIOR 65 TO 75",
-   8: "OLD SENIOR 75 TO 90",
-   9: "VERY OLD SENIOR 90 TO 120",
+   0: "TODDLER 0 TO 3",
+   1: "SMALL CHILD 3 TO 6",
+   2: "PRETEEN 6 TO 13",
+   3: "TEEN 13 TO 18",
+   4: "YOUNG ADULT 18 TO 21",
+   5: "ADULT 21 TO 30",
+   6: "MIDDLE AGED ADULT 30 TO 50",
+   7: "OLD ADULT 50 TO 65",
+   8: "SENIOR 65 TO 75",
+   9: "OLD SENIOR 75 TO 100",
+   10: "SUPERCENTENARIAN 100+",
    200: "UNKNOWN AGE"
    }
 
@@ -327,7 +328,6 @@ def splitTraining(X, y):
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.28, random_state=0)
     return X_train, X_test, y_train, y_test
 
-
 def main():
     '''
     crashes_df = pd.read_csv('../data/crashes-summer2018.csv')
@@ -343,8 +343,9 @@ def main():
     trainingTable = pd.read_csv("../data/training-final-values.csv")
     trainingLabels = pd.read_csv("../data/training-final-labels.csv")
     trainingTable.columns = [c.replace(' ', '_') for c in trainingTable.columns]
+    
 #    print(trainingTable.columns)
-    trainingValues = trainingTable
+    
 #    print(trainingLabels.values)
 #    print(trainingTable)
     X_train, X_test, y_train, y_test = splitTraining(trainingTable, trainingLabels)
@@ -362,8 +363,8 @@ def main():
     print(feature_name)
     kbestfeaturenames = ','.join(feature_name)
     print(kbestfeaturenames)
-#    np.savetxt("oversampledtrain.csv", X_res, delimiter=",",header=kbestfeaturenames,comments='',fmt='%d')
-#    np.savetxt("oversampledlabels.csv", y_res, delimiter=",",header='INJURY_CLASSIFICATION',comments='',fmt='%d')
+    #np.savetxt("oversampledtrain.csv", X_res, delimiter=",",header=kbestfeaturenames,comments='',fmt='%d')
+    #np.savetxt("oversampledlabels.csv", y_res, delimiter=",",header='INJURY_CLASSIFICATION',comments='',fmt='%d')
     
     y_res_2 = []
     for v in y_res:
@@ -380,32 +381,6 @@ def main():
             if feature_name[g] in categoryList:
                 try:
                     feature = categories[feature_name[g]]
-                    #special case - ages: categorize them
-                    if feature_name[g] == "AGE":
-                        age = x[g]
-                        if age < 6:
-                            sublist.append(feature[0])
-                        elif age < 13:
-                            sublist.append(feature[1])
-                        elif age < 18:
-                            sublist.append(feature[2])
-                        elif age < 21:
-                            sublist.append(feature[3])
-                        elif age < 30:
-                            sublist.append(feature[4])
-                        elif age < 50:
-                            sublist.append(feature[5])
-                        elif age < 65:
-                            sublist.append(feature[6])
-                        elif age < 75:
-                            sublist.append(feature[7])
-                        elif age < 90:
-                            sublist.append(feature[8])
-                        elif age < 120:
-                            sublist.append(feature[9])
-                        else:
-                            sublist.append(feature[200])
-                        continue
                     sublist.append(feature[x[g]])
                 except Exception as e:
                     print("Error x[g] =", x[g], "Feature =", feature)
