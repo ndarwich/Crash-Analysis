@@ -64,11 +64,11 @@ def main():
     kbestfeaturenames = ','.join(feature_name)
     print(kbestfeaturenames)
 #    np.savetxt("oversampledtrain.csv", X_res, delimiter=",",header=kbestfeaturenames,comments='',fmt='%d')
-#    np.savetxt("oversampledlabels.csv", y_res, delimiter=",",header='MOST_SEVERE_INJURY',comments='',fmt='%d')
+#    np.savetxt("oversampledlabels.csv", y_res, delimiter=",",header='INJURY_CLASSIFICATION',comments='',fmt='%d')
     
     y_res_2 = [str((int(v))) + " INJURY" for v in y_res]
     
-    np.savetxt("oversampledlabels_strings.csv", y_res_2, delimiter=",",header='MOST_SEVERE_INJURY',comments='',fmt='%s')    
+    np.savetxt("oversampledlabels_strings.csv", y_res_2, delimiter=",",header='INJURY_CLASSIFICATION',comments='',fmt='%s')    
 
     mylist = [[str(int(x[g])) + " " + feature_name[g] for g in range(len(x))] for x in X_res]
     np.savetxt("oversampledtrain_strings.csv", mylist, delimiter=",",header=kbestfeaturenames,comments='',fmt='%s')          
