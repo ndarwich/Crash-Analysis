@@ -15,12 +15,13 @@ from matplotlib.colors import rgb2hex
 import matplotlib as mpl
 import seaborn as sns
 from imblearn import under_sampling, over_sampling
+from sklearn.naive_bayes import BernoulliNB
 from imblearn.combine import SMOTETomek
 from imblearn.over_sampling import RandomOverSampler
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.feature_selection import SelectKBest, SelectPercentile, chi2, SelectFdr, f_regression, mutual_info_classif, RFE
 from imblearn import over_sampling
-
+from sklearn.metrics import f1_score
 LIGHTING_CONDITION = {
 0: "DARKNESS",
 1: "DAYLIGHT",
@@ -351,9 +352,11 @@ def main():
     X_train, X_test, y_train, y_test = splitTraining(trainingTable, trainingLabels)
     trainingmatrix = sp.csr_matrix(X_train)
     kbest = SelectKBest(chi2, k=20)
-    
+    testmatrix = sp.csr_matrix(X_test)
 #    print(trainingmatrix.toarray())
     reduced_train = kbest.fit_transform(trainingmatrix.toarray(), y_train)
+    reduced_test = kbest.transform(testmatrix.toarray())    
+    
 #
     ros = RandomOverSampler(random_state=42)
     X_res, y_res = ros.fit_sample(reduced_train, y_train)
@@ -363,6 +366,11 @@ def main():
     print(feature_name)
     kbestfeaturenames = ','.join(feature_name)
     print(kbestfeaturenames)
+    
+    bnb = BernoulliNB(alpha=0.9,binarize=None, class_prior=None, fit_prior=True)
+    bnb.fit(X_res, y_res)
+    results = bnb.predict(reduced_test)
+    print(f1_score(y_test, results, average='weighted'))   
     #np.savetxt("oversampledtrain.csv", X_res, delimiter=",",header=kbestfeaturenames,comments='',fmt='%d')
     #np.savetxt("oversampledlabels.csv", y_res, delimiter=",",header='INJURY_CLASSIFICATION',comments='',fmt='%d')
     
@@ -370,7 +378,7 @@ def main():
     for v in y_res:
         y_res_2.append(INJURY_CLASSIFICATION[v])
     
-    np.savetxt("oversampledlabels_strings.csv", y_res_2, delimiter=",",header='INJURY_CLASSIFICATION',comments='',fmt='%s')    
+#    np.savetxt("oversampledlabels_strings.csv", y_res_2, delimiter=",",header='INJURY_CLASSIFICATION',comments='',fmt='%s')    
    # mylist = [[ for g in range(len(x))] for x in X_res]
     X_res = X_res.astype(int)
     categoryList = categories.keys()
@@ -387,7 +395,7 @@ def main():
             else:
                 sublist.append(str(int(x[g])) + " " + feature_name[g])
         mylist.append(sublist)
-    np.savetxt("oversampledtrain_strings.csv", mylist, delimiter=",",header=kbestfeaturenames,comments='',fmt='%s')          
+#    np.savetxt("oversampledtrain_strings.csv", mylist, delimiter=",",header=kbestfeaturenames,comments='',fmt='%s')          
 if __name__ == "__main__":
     main()
 
