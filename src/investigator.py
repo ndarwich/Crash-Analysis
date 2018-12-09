@@ -189,12 +189,23 @@ WORK_ZONE_TYPE = {
 200: "UNKNOWN"
 }
 
+"""
 INJURY_CLASSIFICATION = {
 0: "NO INDICATION OF INJURY",
 1: "REPORTED NOT EVIDENT",
 2: "NONINCAPACITATING INJURY",
 3: "INCAPACITATING INJURY",
 4: "FATAL",
+200: "UNKNOWN"
+}
+"""
+
+#NEW
+INJURY_CLASSIFICATION = {
+0: "NO INDICATION OF INJURY",
+1: "NONINCAPACITATING INJURY",
+2: "INCAPACITATING INJURY",
+3: "FATAL",
 200: "UNKNOWN"
 }
 
@@ -342,7 +353,8 @@ def main():
 #    trainingTable = pd.read_csv("../data/trainingValid.csv")
     
     trainingTable = pd.read_csv("../data/training-final-values.csv")
-    trainingLabels = pd.read_csv("../data/training-final-labels.csv")
+    #trainingLabels = pd.read_csv("../data/training-final-labels.csv")
+    trainingLabels = pd.read_csv("../data/training-final-labels-NEW.csv")
     trainingTable.columns = [c.replace(' ', '_') for c in trainingTable.columns]
     
 #    print(trainingTable.columns)
@@ -371,14 +383,14 @@ def main():
     bnb.fit(X_res, y_res)
     results = bnb.predict(reduced_test)
     print(f1_score(y_test, results, average='weighted'))   
-    #np.savetxt("oversampledtrain.csv", X_res, delimiter=",",header=kbestfeaturenames,comments='',fmt='%d')
-    #np.savetxt("oversampledlabels.csv", y_res, delimiter=",",header='INJURY_CLASSIFICATION',comments='',fmt='%d')
+    np.savetxt("oversampledtrain.csv", X_res, delimiter=",",header=kbestfeaturenames,comments='',fmt='%d')
+    np.savetxt("oversampledlabels.csv", y_res, delimiter=",",header='INJURY_CLASSIFICATION',comments='',fmt='%d')
     
     y_res_2 = []
     for v in y_res:
         y_res_2.append(INJURY_CLASSIFICATION[v])
     
-#    np.savetxt("oversampledlabels_strings.csv", y_res_2, delimiter=",",header='INJURY_CLASSIFICATION',comments='',fmt='%s')    
+    np.savetxt("oversampledlabels_strings.csv", y_res_2, delimiter=",",header='INJURY_CLASSIFICATION',comments='',fmt='%s')    
    # mylist = [[ for g in range(len(x))] for x in X_res]
     X_res = X_res.astype(int)
     categoryList = categories.keys()
@@ -395,7 +407,7 @@ def main():
             else:
                 sublist.append(str(int(x[g])) + " " + feature_name[g])
         mylist.append(sublist)
-#    np.savetxt("oversampledtrain_strings.csv", mylist, delimiter=",",header=kbestfeaturenames,comments='',fmt='%s')          
+    np.savetxt("oversampledtrain_strings.csv", mylist, delimiter=",",header=kbestfeaturenames,comments='',fmt='%s')          
 if __name__ == "__main__":
     main()
 
