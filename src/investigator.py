@@ -420,7 +420,7 @@ def drawproportiongraph():
     (weather_group / weather_group.sum()).plot(kind='barh')     
 
 
-def drawpopulationmapandaccidents():
+def drawpopulationmapandaccidents(): // reference: http://www.jtrive.com/visualizing-population-density-by-zip-code-with-basemap.html
     crashes_df = pd.read_csv('../data/crashes-summer2018.csv')    
     pop_path = "ChicagoPopulation.csv"
     DF       = pd.read_csv("ChicagoPopulation.csv")
