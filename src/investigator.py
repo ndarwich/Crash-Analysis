@@ -409,7 +409,7 @@ if __name__ == "__main__":
     main()
 
 
-'''
+
 def drawproportiongraph():
     weather_group = crashes_df['34_CONDITION'].value_counts()
     print(weather_group)
@@ -561,4 +561,3 @@ def drawmapandaccidents(): # tutorial on basemaps from http://www.jtrive.com/vis
     plt.savefig('Car_Accidents_Chicago_Visualization.png')
     plt.show() 
     plt.draw()    
-'''
