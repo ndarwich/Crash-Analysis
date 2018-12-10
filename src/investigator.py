@@ -364,10 +364,10 @@ def main():
     X_train, X_test, y_train, y_test = splitTraining(trainingTable, trainingLabels)
     trainingmatrix = sp.csr_matrix(X_train)
     kbest = SelectKBest(chi2, k=20)
-    testmatrix = sp.csr_matrix(X_test)
+
 #    print(trainingmatrix.toarray())
     reduced_train = kbest.fit_transform(trainingmatrix.toarray(), y_train)
-    reduced_test = kbest.transform(testmatrix.toarray())    
+ 
     
 #
     ros = RandomOverSampler(random_state=42)
@@ -379,10 +379,7 @@ def main():
     kbestfeaturenames = ','.join(feature_name)
     print(kbestfeaturenames)
     
-    bnb = BernoulliNB(alpha=0.9,binarize=None, class_prior=None, fit_prior=True)
-    bnb.fit(X_res, y_res)
-    results = bnb.predict(reduced_test)
-    print(f1_score(y_test, results, average='weighted'))   
+
     np.savetxt("oversampledtrain.csv", X_res, delimiter=",",header=kbestfeaturenames,comments='',fmt='%d')
     np.savetxt("oversampledlabels.csv", y_res, delimiter=",",header='INJURY_CLASSIFICATION',comments='',fmt='%d')
     
