@@ -21,7 +21,7 @@ from imblearn.over_sampling import RandomOverSampler
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.feature_selection import SelectKBest, SelectPercentile, chi2, SelectFdr, f_regression, mutual_info_classif, RFE
 from imblearn import over_sampling
-from mpl_toolkits.basemap import Basemap
+#from mpl_toolkits.basemap import Basemap
 from sklearn.metrics import f1_score
 LIGHTING_CONDITION = {
 0: "DARKNESS",
@@ -534,14 +534,14 @@ def main():
     print(kbestfeaturenames)
     
 
-#    np.savetxt("oversampledtrain.csv", X_res, delimiter=",",header=kbestfeaturenames,comments='',fmt='%d')
-#    np.savetxt("oversampledlabels.csv", y_res, delimiter=",",header='INJURY_CLASSIFICATION',comments='',fmt='%d')
+    np.savetxt("oversampledtrain.csv", X_res, delimiter=",",header=kbestfeaturenames,comments='',fmt='%d')
+    np.savetxt("oversampledlabels.csv", y_res, delimiter=",",header='INJURY_CLASSIFICATION',comments='',fmt='%d')
     
     y_res_2 = []
     for v in y_res:
         y_res_2.append(INJURY_CLASSIFICATION[v])
     
-#    np.savetxt("oversampledlabels_strings.csv", y_res_2, delimiter=",",header='INJURY_CLASSIFICATION',comments='',fmt='%s')    
+    np.savetxt("oversampledlabels_strings.csv", y_res_2, delimiter=",",header='INJURY_CLASSIFICATION',comments='',fmt='%s')    
    # mylist = [[ for g in range(len(x))] for x in X_res]
     X_res = X_res.astype(int)
     categoryList = categories.keys()
@@ -558,15 +558,15 @@ def main():
             else:
                 sublist.append(str(int(x[g])) + " " + feature_name[g])
         mylist.append(sublist)
-#    np.savetxt("oversampledtrain_strings.csv", mylist, delimiter=",",header=kbestfeaturenames,comments='',fmt='%s')
+    np.savetxt("oversampledtrain_strings.csv", mylist, delimiter=",",header=kbestfeaturenames,comments='',fmt='%s')
     crashes_df = pd.read_csv('../data/crashes-summer2018.csv')         
     DF = pd.read_csv("ChicagoPopulation.csv")    
     
 # TO DRAW THE MAPS THE BASEMAP MODULE IS REQUIRED. IT CAN BE INSTALLED VIA ANACONDA WITH conda install -c anaconda basemap 
 # OR IF ON LINUX USE THE COMMAND sudo apt-get install python-matplotlib AND sudo apt-get install python-mpltoolkits.basemap
 # ONCE INSTALLED UNCOMMENT THE TWO LINES BELOW AND THE IMPORT MODULE OF BASEMAP ABOVE TO DRAW THE MAPS    
-    drawmapandaccidents(crashes_df)        
-    drawpopulationmapandaccidents(crashes_df, DF)      
+#    drawmapandaccidents(crashes_df)        
+#    drawpopulationmapandaccidents(crashes_df, DF)      
     
 if __name__ == "__main__":
     main()
