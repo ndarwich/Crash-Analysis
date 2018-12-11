@@ -333,84 +333,6 @@ categories = {
 "PHYSICAL_CONDITION": PHYSICAL_CONDITION
 }
 
-
-
-#data splitting for training data
-def splitTraining(X, y):
-    #0.28 split produced great results
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.28, random_state=0)
-    return X_train, X_test, y_train, y_test
-
-def main():
-    '''
-    crashes_df = pd.read_csv('../data/crashes-summer2018.csv')
-    people_df = pd.read_csv('../data/people-summer2018.csv')
-    vehicles_df = pd.read_csv('../data/vehicles-summer2018.csv')
-    dfs = [crashes_df, people_df, vehicles_df]
-    for df in dfs:
-        df.columns = [c.replace(' ', '_') for c in df.columns]
-        print(df.columns)
-    '''
-#    trainingTable = pd.read_csv("../data/trainingValid.csv")
-    
-    trainingTable = pd.read_csv("../data/training-final-values.csv")
-    #trainingLabels = pd.read_csv("../data/training-final-labels.csv")
-    trainingLabels = pd.read_csv("../data/training-final-labels-NEW.csv")
-    trainingTable.columns = [c.replace(' ', '_') for c in trainingTable.columns]
-    
-#    print(trainingTable.columns)
-    
-#    print(trainingLabels.values)
-#    print(trainingTable)
-    X_train, X_test, y_train, y_test = splitTraining(trainingTable, trainingLabels) # make train test split
-    trainingmatrix = sp.csr_matrix(X_train)
-    kbest = SelectKBest(chi2, k=20) # select best 2o features
-
-#    print(trainingmatrix.toarray())
-    reduced_train = kbest.fit_transform(trainingmatrix.toarray(), y_train)
- 
-    
-#
-    ros = RandomOverSampler(random_state=42)
-    X_res, y_res = ros.fit_sample(reduced_train, y_train) # over sample training data
-    print(y_res) 
-    feature_idx = kbest.get_support()
-    feature_name = trainingTable.columns[feature_idx]
-    print(feature_name)
-    kbestfeaturenames = ','.join(feature_name)
-    print(kbestfeaturenames)
-    
-
-#    np.savetxt("oversampledtrain.csv", X_res, delimiter=",",header=kbestfeaturenames,comments='',fmt='%d')
-#    np.savetxt("oversampledlabels.csv", y_res, delimiter=",",header='INJURY_CLASSIFICATION',comments='',fmt='%d')
-    
-    y_res_2 = []
-    for v in y_res:
-        y_res_2.append(INJURY_CLASSIFICATION[v])
-    
-#    np.savetxt("oversampledlabels_strings.csv", y_res_2, delimiter=",",header='INJURY_CLASSIFICATION',comments='',fmt='%s')    
-   # mylist = [[ for g in range(len(x))] for x in X_res]
-    X_res = X_res.astype(int)
-    categoryList = categories.keys()
-    mylist = []
-    for x in X_res: # convert number to string in dictionaries
-        sublist = []
-        for g in range(len(x)):
-            if feature_name[g] in categoryList:
-                try:
-                    feature = categories[feature_name[g]]
-                    sublist.append(feature[x[g]])
-                except Exception as e:
-                    print("Error x[g] =", x[g], "Feature =", feature)
-            else:
-                sublist.append(str(int(x[g])) + " " + feature_name[g])
-        mylist.append(sublist)
-#    np.savetxt("oversampledtrain_strings.csv", mylist, delimiter=",",header=kbestfeaturenames,comments='',fmt='%s')          
-if __name__ == "__main__":
-    main()
-
-
-
 def drawproportiongraph():
     weather_group = crashes_df['34_CONDITION'].value_counts()
     print(weather_group)
@@ -562,3 +484,80 @@ def drawmapandaccidents(): # tutorial on basemaps from http://www.jtrive.com/vis
     plt.savefig('Car_Accidents_Chicago_Visualization.png')
     plt.show() 
     plt.draw()    
+
+
+#data splitting for training data
+def splitTraining(X, y):
+    #0.28 split produced great results
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.28, random_state=0)
+    return X_train, X_test, y_train, y_test
+
+def main():
+    '''
+    crashes_df = pd.read_csv('../data/crashes-summer2018.csv')
+    people_df = pd.read_csv('../data/people-summer2018.csv')
+    vehicles_df = pd.read_csv('../data/vehicles-summer2018.csv')
+    dfs = [crashes_df, people_df, vehicles_df]
+    for df in dfs:
+        df.columns = [c.replace(' ', '_') for c in df.columns]
+        print(df.columns)
+    '''
+#    trainingTable = pd.read_csv("../data/trainingValid.csv")
+    
+    trainingTable = pd.read_csv("../data/training-final-values.csv")
+    #trainingLabels = pd.read_csv("../data/training-final-labels.csv")
+    trainingLabels = pd.read_csv("../data/training-final-labels-NEW.csv")
+    trainingTable.columns = [c.replace(' ', '_') for c in trainingTable.columns]
+    
+#    print(trainingTable.columns)
+    
+#    print(trainingLabels.values)
+#    print(trainingTable)
+    X_train, X_test, y_train, y_test = splitTraining(trainingTable, trainingLabels) # make train test split
+    trainingmatrix = sp.csr_matrix(X_train)
+    kbest = SelectKBest(chi2, k=20) # select best 2o features
+
+#    print(trainingmatrix.toarray())
+    reduced_train = kbest.fit_transform(trainingmatrix.toarray(), y_train)
+ 
+    
+#
+    ros = RandomOverSampler(random_state=42)
+    X_res, y_res = ros.fit_sample(reduced_train, y_train) # over sample training data
+    print(y_res) 
+    feature_idx = kbest.get_support()
+    feature_name = trainingTable.columns[feature_idx]
+    print(feature_name)
+    kbestfeaturenames = ','.join(feature_name)
+    print(kbestfeaturenames)
+    
+
+#    np.savetxt("oversampledtrain.csv", X_res, delimiter=",",header=kbestfeaturenames,comments='',fmt='%d')
+#    np.savetxt("oversampledlabels.csv", y_res, delimiter=",",header='INJURY_CLASSIFICATION',comments='',fmt='%d')
+    
+    y_res_2 = []
+    for v in y_res:
+        y_res_2.append(INJURY_CLASSIFICATION[v])
+    
+#    np.savetxt("oversampledlabels_strings.csv", y_res_2, delimiter=",",header='INJURY_CLASSIFICATION',comments='',fmt='%s')    
+   # mylist = [[ for g in range(len(x))] for x in X_res]
+    X_res = X_res.astype(int)
+    categoryList = categories.keys()
+    mylist = []
+    for x in X_res: # convert number to string in dictionaries
+        sublist = []
+        for g in range(len(x)):
+            if feature_name[g] in categoryList:
+                try:
+                    feature = categories[feature_name[g]]
+                    sublist.append(feature[x[g]])
+                except Exception as e:
+                    print("Error x[g] =", x[g], "Feature =", feature)
+            else:
+                sublist.append(str(int(x[g])) + " " + feature_name[g])
+        mylist.append(sublist)
+#    np.savetxt("oversampledtrain_strings.csv", mylist, delimiter=",",header=kbestfeaturenames,comments='',fmt='%s')          
+if __name__ == "__main__":
+    main()
+
+
