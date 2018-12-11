@@ -1,7 +1,0 @@
-Remove columns:
-Damage
-Geolocation
-STREET_*
-DATE POLICE NOTIFIED
-DATE OF CRASH
-CRASH DATE EST I
