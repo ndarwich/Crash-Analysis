@@ -21,7 +21,7 @@ from imblearn.over_sampling import RandomOverSampler
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.feature_selection import SelectKBest, SelectPercentile, chi2, SelectFdr, f_regression, mutual_info_classif, RFE
 from imblearn import over_sampling
-import Basemap
+#from mpl_toolkits.basemap import Basemap
 from sklearn.metrics import f1_score
 LIGHTING_CONDITION = {
 0: "DARKNESS",
@@ -381,14 +381,14 @@ def main():
     print(kbestfeaturenames)
     
 
-    np.savetxt("oversampledtrain.csv", X_res, delimiter=",",header=kbestfeaturenames,comments='',fmt='%d')
-    np.savetxt("oversampledlabels.csv", y_res, delimiter=",",header='INJURY_CLASSIFICATION',comments='',fmt='%d')
+#    np.savetxt("oversampledtrain.csv", X_res, delimiter=",",header=kbestfeaturenames,comments='',fmt='%d')
+#    np.savetxt("oversampledlabels.csv", y_res, delimiter=",",header='INJURY_CLASSIFICATION',comments='',fmt='%d')
     
     y_res_2 = []
     for v in y_res:
         y_res_2.append(INJURY_CLASSIFICATION[v])
     
-    np.savetxt("oversampledlabels_strings.csv", y_res_2, delimiter=",",header='INJURY_CLASSIFICATION',comments='',fmt='%s')    
+#    np.savetxt("oversampledlabels_strings.csv", y_res_2, delimiter=",",header='INJURY_CLASSIFICATION',comments='',fmt='%s')    
    # mylist = [[ for g in range(len(x))] for x in X_res]
     X_res = X_res.astype(int)
     categoryList = categories.keys()
@@ -405,7 +405,7 @@ def main():
             else:
                 sublist.append(str(int(x[g])) + " " + feature_name[g])
         mylist.append(sublist)
-    np.savetxt("oversampledtrain_strings.csv", mylist, delimiter=",",header=kbestfeaturenames,comments='',fmt='%s')          
+#    np.savetxt("oversampledtrain_strings.csv", mylist, delimiter=",",header=kbestfeaturenames,comments='',fmt='%s')          
 if __name__ == "__main__":
     main()
 
