@@ -1,17 +1,18 @@
-### This project analyzes crash data from the city of Chicago.
+# An Investigation Into What Causes Crash Injuries, Fatalities
 
-### The original datasets can be found at the following links:
+### This project analyzes crash data from the City of Chicago.
 
+## The original datasets can be found at the following links:
 ### Crashes - https://data.cityofchicago.org/Transportation/Traffic-Crashes-Crashes/85ca-t3if
 ### Vehicles - https://data.cityofchicago.org/Transportation/Traffic-Crashes-Vehicles/68nd-jvt3
 ### People - https://data.cityofchicago.org/Transportation/Traffic-Crashes-People/u6pd-qa9d
 
-### The original datasets have been modified by us (by joining the tables, normalizing the data, data cleaning, etc) and can be found in the data folder.
+### The original datasets have been modified (by joining the tables, binning the data, feature reduction, etc) and can be found in the "data" folder.
 
-### Source code (used to do data transformations, mapping visualizations, etc) can be found in the src folder.
+### Source code (used for data transformation, map visualizations, dictionaries, etc) can be found in the src folder.
 
-### Weka Files contains all the appropriate files needed to do classification in Weka. oversampledtrain_strings.arff is used for training the classifier and final-test-NEW.arff is used as testing data on the classifier. Both training and test use INJURY_CLASSIFICATION as the label to predict.
+### The directory "Weka Files" contains files needed to do classification in Weka. oversampledtrain_strings.arff is used for training the classifier and final-test-NEW.arff is used as testing data on the classifier. Both training and test use INJURY_CLASSIFICATION as the label to predict.
 
-### The corresponding association rules mined using Weka can be found in the Association Rules folder.
+### The corresponding association rules mined using Weka can be found in the "Association Rules" folder.
 
 ### More information regarding this report (data files, slides, etc) can be found at our github repo: https://github.com/ndarwich/Crash-Analysis
