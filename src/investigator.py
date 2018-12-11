@@ -21,7 +21,7 @@ from imblearn.over_sampling import RandomOverSampler
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.feature_selection import SelectKBest, SelectPercentile, chi2, SelectFdr, f_regression, mutual_info_classif, RFE
 from imblearn import over_sampling
-#from mpl_toolkits.basemap import Basemap
+from mpl_toolkits.basemap import Basemap
 from sklearn.metrics import f1_score
 LIGHTING_CONDITION = {
 0: "DARKNESS",
@@ -343,14 +343,16 @@ def drawproportiongraph():
     (weather_group / weather_group.sum()).plot(kind='barh')     
 
 
-def drawpopulationmapandaccidents(): # reference: http://www.jtrive.com/visualizing-population-density-by-zip-code-with-basemap.html
-    crashes_df = pd.read_csv('../data/crashes-summer2018.csv')    
+
+# To run the code below the Basemap module must be installed. If installed, uncomment the import at the beginning!
+def drawpopulationmapandaccidents(crashes_df, DF): # reference: http://www.jtrive.com/visualizing-population-density-by-zip-code-with-basemap.html
+#    crashes_df = pd.read_csv('../data/crashes-summer2018.csv')    
     pop_path = "ChicagoPopulation.csv"
-    DF       = pd.read_csv("ChicagoPopulation.csv")
+#    DF       = pd.read_csv("ChicagoPopulation.csv")
     colormap = plt.cm.Oranges 
     
     us_shape_file_dir = "cb_2017_us_zcta510_500k"
-    os.chdir(us_shape_file_dir)
+#    os.chdir(us_shape_file_dir)
     
     # Chicago coordinates.
     lowerlon = -88.2 
@@ -435,11 +437,11 @@ def drawpopulationmapandaccidents(): # reference: http://www.jtrive.com/visualiz
     plt.gca().axis("off")
     plt.show()      
 
-
-def drawmapandaccidents(): # tutorial on basemaps from http://www.jtrive.com/visualizing-population-density-by-zip-code-with-basemap.html
+# To run the code below the Basemap module must be installed. If installed, uncomment the import at the beginning!
+def drawmapandaccidents(crashes_df): # tutorial on basemaps from http://www.jtrive.com/visualizing-population-density-by-zip-code-with-basemap.html
+#    crashes_df = pd.read_csv('../data/crashes-summer2018.csv')
     us_shape_file_dir = "cb_2017_us_zcta510_500k"
     os.chdir(us_shape_file_dir)
-    crashes_df = pd.read_csv('../data/crashes-summer2018.csv')
     # Chicago coordinates.
     lowerlon = -88.2 
     upperlon = -87.2
@@ -556,8 +558,20 @@ def main():
             else:
                 sublist.append(str(int(x[g])) + " " + feature_name[g])
         mylist.append(sublist)
-#    np.savetxt("oversampledtrain_strings.csv", mylist, delimiter=",",header=kbestfeaturenames,comments='',fmt='%s')          
+#    np.savetxt("oversampledtrain_strings.csv", mylist, delimiter=",",header=kbestfeaturenames,comments='',fmt='%s')
+    crashes_df = pd.read_csv('../data/crashes-summer2018.csv')         
+    DF = pd.read_csv("ChicagoPopulation.csv")    
+    
+# TO DRAW THE MAPS THE BASEMAP MODULE IS REQUIRED. IT CAN BE INSTALLED VIA ANACONDA WITH conda install -c anaconda basemap 
+# OR IF ON LINUX USE THE COMMAND sudo apt-get install python-matplotlib AND sudo apt-get install python-mpltoolkits.basemap
+# ONCE INSTALLED UNCOMMENT THE TWO LINES BELOW AND THE IMPORT MODULE OF BASEMAP ABOVE TO DRAW THE MAPS    
+    drawmapandaccidents(crashes_df)        
+    drawpopulationmapandaccidents(crashes_df, DF)      
+    
 if __name__ == "__main__":
     main()
+
+
+
 
 
