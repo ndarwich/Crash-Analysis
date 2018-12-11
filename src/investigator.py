@@ -21,6 +21,7 @@ from imblearn.over_sampling import RandomOverSampler
 from sklearn.model_selection import train_test_split, cross_val_score
 from sklearn.feature_selection import SelectKBest, SelectPercentile, chi2, SelectFdr, f_regression, mutual_info_classif, RFE
 from imblearn import over_sampling
+import Basemap
 from sklearn.metrics import f1_score
 LIGHTING_CONDITION = {
 0: "DARKNESS",
@@ -361,9 +362,9 @@ def main():
     
 #    print(trainingLabels.values)
 #    print(trainingTable)
-    X_train, X_test, y_train, y_test = splitTraining(trainingTable, trainingLabels)
+    X_train, X_test, y_train, y_test = splitTraining(trainingTable, trainingLabels) # make train test split
     trainingmatrix = sp.csr_matrix(X_train)
-    kbest = SelectKBest(chi2, k=20)
+    kbest = SelectKBest(chi2, k=20) # select best 2o features
 
 #    print(trainingmatrix.toarray())
     reduced_train = kbest.fit_transform(trainingmatrix.toarray(), y_train)
@@ -371,7 +372,7 @@ def main():
     
 #
     ros = RandomOverSampler(random_state=42)
-    X_res, y_res = ros.fit_sample(reduced_train, y_train)
+    X_res, y_res = ros.fit_sample(reduced_train, y_train) # over sample training data
     print(y_res) 
     feature_idx = kbest.get_support()
     feature_name = trainingTable.columns[feature_idx]
@@ -392,7 +393,7 @@ def main():
     X_res = X_res.astype(int)
     categoryList = categories.keys()
     mylist = []
-    for x in X_res:
+    for x in X_res: # convert number to string in dictionaries
         sublist = []
         for g in range(len(x)):
             if feature_name[g] in categoryList:
@@ -420,7 +421,7 @@ def drawproportiongraph():
     (weather_group / weather_group.sum()).plot(kind='barh')     
 
 
-def drawpopulationmapandaccidents(): // reference: http://www.jtrive.com/visualizing-population-density-by-zip-code-with-basemap.html
+def drawpopulationmapandaccidents(): # reference: http://www.jtrive.com/visualizing-population-density-by-zip-code-with-basemap.html
     crashes_df = pd.read_csv('../data/crashes-summer2018.csv')    
     pop_path = "ChicagoPopulation.csv"
     DF       = pd.read_csv("ChicagoPopulation.csv")
