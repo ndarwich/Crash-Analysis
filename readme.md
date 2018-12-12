@@ -11,7 +11,7 @@
 
 ### Source code (used for data transformation, map visualizations, dictionaries, etc) can be found in the src folder.
 
-### The directory "Weka Files" contains files needed to do classification in Weka. oversampledtrain_strings.arff is used for training the classifier and final-test-NEW.arff is used as testing data on the classifier. Both training and test use INJURY_CLASSIFICATION as the label to predict.
+### The directory "Weka Files" contains files needed to do classification in Weka. They will be needed to be converted into .arff files using WEKA (we put the arff files up on github initially but downloading them converts them into .txt thus making them unreadable by WEKA). To convert the csv files into .arff: start WEKA and click Tools then ArffViewer. A new window will open then click File and Open then navigate to the directory where the files are. Once in that directory, click Files of Type and the file type to CSV data files. The file will be loaded and now click File and Save As and then click Save. This must be done for both files.
 
 ### The corresponding association rules mined using Weka can be found in the "Association Rules" folder.
 
